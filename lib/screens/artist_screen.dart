@@ -16,6 +16,10 @@ class _ArtistScreenState extends State<ArtistScreen> {
   final TextEditingController _inicioController = TextEditingController();
   final TextEditingController _albumsController = TextEditingController();
 
+  void deleteArtist(String docId) {
+    _cloudFirestoreService.deleteArtist('artistas', docId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +53,6 @@ class _ArtistScreenState extends State<ArtistScreen> {
               stream: _cloudFirestoreService.getArtists('artistas'),
               builder: (context, AsyncSnapshot<List<ArtistModel>> snapshot) {
                 if (snapshot.hasError) {
-                  print('Error al obtener artistas: ${snapshot.error}');
                   return Text('Error : ${snapshot.error}');
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -61,6 +64,10 @@ class _ArtistScreenState extends State<ArtistScreen> {
                       title: Text(artist.name),
                       subtitle: Text('Genero: ${artist.genre}'),
                       onTap: null,
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () => deleteArtist(artist.id),
+                      ),
                     );
                   }).toList(),
                 );
