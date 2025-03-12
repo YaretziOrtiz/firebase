@@ -16,6 +16,19 @@ class _ArtistScreenState extends State<ArtistScreen> {
   final TextEditingController _inicioController = TextEditingController();
   final TextEditingController _albumsController = TextEditingController();
 
+  void insertArtist() {
+    _cloudFirestoreService.insertArtist('artistas', {
+      'nombre': _nombreController.text,
+      'genero': _generoController.text,
+      'albums': int.parse(_albumsController.text),
+      'inicio': int.parse(_inicioController.text),
+    });
+    _nombreController.clear();
+    _generoController.clear();
+    _albumsController.clear();
+    _inicioController.clear();
+  }
+
   void deleteArtist(String docId) {
     _cloudFirestoreService.deleteArtist('artistas', docId);
   }
@@ -45,7 +58,7 @@ class _ArtistScreenState extends State<ArtistScreen> {
             decoration: const InputDecoration(labelText: 'Inicio'),
           ),
           ElevatedButton(
-            onPressed: null,
+            onPressed: insertArtist,
             child: const Text('Agregar artista'),
           ),
           Expanded(
